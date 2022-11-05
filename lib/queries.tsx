@@ -50,7 +50,6 @@ const authorFields = groq`
   bio
 `
 
-
 export const authorQuery = groq`
 {
   "author": *[_type == "author" && slug.current == $slug] | order(_updatedAt desc) [0] {
