@@ -18,6 +18,7 @@ export const indexQuery = groq`
   ${postFields}
 }`
 
+// Post queries
 export const postQuery = groq`
 {
   "post": *[_type == "post" && slug.current == $slug] | order(_updatedAt desc) [0] {
@@ -37,5 +38,37 @@ export const postSlugsQuery = groq`
 export const postBySlugQuery = groq`
 *[_type == "post" && slug.current == $slug][0] {
   ${postFields}
+}
+`
+
+// Author queries
+
+const authorFields = groq`
+  _id,
+  name,
+  picture,
+  bio
+`
+
+
+export const authorQuery = groq`
+{
+  "author": *[_type == "author" && slug.current == $slug] | order(_updatedAt desc) [0] {
+    content,
+    ${authorFields}
+  },
+  "moreauthors": *[_type == "author" && slug.current != $slug] | order(date desc, _updatedAt desc) [0...2] {
+    content,
+    ${authorFields}
+  }
+}`
+
+export const authorSlugsQuery = groq`
+*[_type == "author" && defined(slug.current)][].slug.current
+`
+
+export const authorBySlugQuery = groq`
+*[_type == "author" && slug.current == $slug][0] {
+  ${authorFields}
 }
 `
